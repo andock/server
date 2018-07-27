@@ -75,7 +75,7 @@
       HOME: "{{ HOME }}"
     tags: ['update']
 
-  - name: "Install acs (andock server)."
+  - name: "Install andock server."
     template:
       src: "templates/andock-server"
       dest: "/usr/local/bin/andock-server"
