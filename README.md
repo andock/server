@@ -1,17 +1,16 @@
-andock-ci.fin (fin docksal livecycle. )
+andock server.
 =========
 
-**andock-ci.server** is a Ansible role which:
+**andock.server** is a Ansible role which:
 * Install docksal
 * Update docksal
 * Configure docksal to listen on 0.0.0.0 
-* Add thin acs (andock-ci server) 
+* Add thin acs (andock server) 
   
 **The livecycle can be controlled with tags**
 * install
 * update
 
-**For more infos visit: https://github.com/andock-ci/pipeline**
 
 Requirements
 ------------
@@ -26,10 +25,10 @@ In order to build your apps with Andock CI, you will need:
 Installation
 ------------
 
-Andock-CI is an Ansible role distributed globally using [Ansible Galaxy](https://galaxy.ansible.com/). In order to install Andock-CI role you can use the following command.
+Andock is an Ansible role distributed globally using [Ansible Galaxy](https://galaxy.ansible.com/). In order to install andock role you can use the following command.
 
 ```
-$ ansible-galaxy install andock-ci.fin
+$ ansible-galaxy install andock.fin
 ```
 
 Update
@@ -38,7 +37,7 @@ Update
 If you want to update the role, you need to pass **--force** parameter when installing. Please, check the following command:
 
 ```
-$ ansible-galaxy install --force andock-ci.fin
+$ ansible-galaxy install --force andock.fin
 ```
 
 

@@ -19,9 +19,9 @@
     become: true
     tags: ['install']
 
-  - name: Create andock-ci user.
+  - name: Create andock user.
     user:
-      name: andock-ci
+      name: andock
       group: docker
       shell: /bin/bash
       generate_ssh_key: yes
@@ -31,7 +31,7 @@
     become: true
     tags: ['install']
 
-  - name: Allow 'sudo' group to user andock-ci.
+  - name: Allow 'sudo' group to user andock.
     lineinfile:
       dest: /etc/sudoers
       state: present
@@ -57,7 +57,7 @@
 
   - name: Install docksal.
     shell: "curl -fsSL get.docksal.io | sh"
-    become_user: andock-ci
+    become_user: andock
     become_method: su
     args:
       creates: "/usr/local/bin/fin"
@@ -68,31 +68,31 @@
 
   - name: Update docksal.
     shell: "fin update"
-    become_user: andock-ci
+    become_user: andock
     become_method: su
     environment:
       DOCKSAL_VHOST_PROXY_IP: "0.0.0.0"
       HOME: "{{ HOME }}"
     tags: ['update']
 
-  - name: "Install acs (andock-ci server)."
+  - name: "Install acs (andock server)."
     template:
-      src: "templates/acs"
-      dest: "/usr/local/bin/acs"
-      owner: andock-ci
+      src: "templates/andock-server"
+      dest: "/usr/local/bin/andock-server"
+      owner: andock
       mode: "u=rx"
     become: true
     tags: ['install', 'update']
 
   - file:
       path: "{{ HOME }}/.docksal"
-      owner: andock-ci
+      owner: andock
       group: docker
       mode: "u=rwx,g=rwx,o=r"
     become: true
     tags: ['install', 'update']
 
-  - name: Please copy and paste the following SSH key to your git user. Andock-ci will use it to checkout your target git repository.
+  - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ HOME }}/.ssh/id_rsa.pub"
     register: ssh_key
     become: true
