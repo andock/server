@@ -1,0 +1,9 @@
+---
+# default andock-ci password.
+pw: "andock-ci"
+
+# default andock-ci ssh key.
+ssh_key: ""
+
+# default andock-ci home folder.
+HOME: "/home/andock-ci"

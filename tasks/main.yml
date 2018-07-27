@@ -1,0 +1,102 @@
+  - name: Install sudo.
+    package:
+      name: sudo
+      state: latest
+    become: true
+    tags: ['install']
+
+  - name: Install git.
+    package:
+      name: git
+      state: latest
+    become: true
+    tags: ['install']
+
+  - name: Create docker group.
+    group:
+      name: docker
+      state: present
+    become: true
+    tags: ['install']
+
+  - name: Create andock-ci user.
+    user:
+      name: andock-ci
+      group: docker
+      shell: /bin/bash
+      generate_ssh_key: yes
+      groups: "sudo"
+      ssh_key_bits: 4096
+      password: "{{ pw }}"
+    become: true
+    tags: ['install']
+
+  - name: Allow 'sudo' group to user andock-ci.
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%sudo'
+      line: '%sudo   ALL=(ALL:ALL) ALL'
+    become: true
+    tags: ['install']
+
+  - name: Add DOCKSAL_VHOST_PROXY_IP export to /etc/profile.
+    lineinfile:
+      path: /etc/profile
+      regexp: '^export DOCKSAL_VHOST_PROXY_IP'
+      line: 'export DOCKSAL_VHOST_PROXY_IP=0.0.0.0'
+    become: true
+    tags: ['install']
+
+  - name: Add DOCKSAL_VHOST_PROXY_IP export to {{ HOME }}/.bashrc
+    lineinfile:
+      path: "{{ HOME }}/.bashrc"
+      regexp: '^export DOCKSAL_VHOST_PROXY_IP'
+      line: 'export DOCKSAL_VHOST_PROXY_IP=0.0.0.0'
+    become: true
+
+  - name: Install docksal.
+    shell: "curl -fsSL get.docksal.io | sh"
+    become_user: andock-ci
+    become_method: su
+    args:
+      creates: "/usr/local/bin/fin"
+    environment:
+      DOCKSAL_VHOST_PROXY_IP: "0.0.0.0"
+      HOME: "{{ HOME }}"
+    tags: ['install']
+
+  - name: Update docksal.
+    shell: "fin update"
+    become_user: andock-ci
+    become_method: su
+    environment:
+      DOCKSAL_VHOST_PROXY_IP: "0.0.0.0"
+      HOME: "{{ HOME }}"
+    tags: ['update']
+
+  - name: "Install acs (andock-ci server)."
+    template:
+      src: "templates/acs"
+      dest: "/usr/local/bin/acs"
+      owner: andock-ci
+      mode: "u=rx"
+    become: true
+    tags: ['install', 'update']
+
+  - file:
+      path: "{{ HOME }}/.docksal"
+      owner: andock-ci
+      group: docker
+      mode: "u=rwx,g=rwx,o=r"
+    become: true
+    tags: ['install', 'update']
+
+  - name: Please copy and paste the following SSH key to your git user. Andock-ci will use it to checkout your target git repository.
+    shell: "cat {{ HOME }}/.ssh/id_rsa.pub"
+    register: ssh_key
+    become: true
+    tags: ['install']
+
+  - debug: msg="{{ ssh_key.stdout_lines }}"
+    tags: ['install']
