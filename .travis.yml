@@ -22,7 +22,7 @@ script:
   - pwd
   - ls
   - cd tests
-  ./run_tests "localhost"
+  - ./run_tests "localhost"
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   # - >
