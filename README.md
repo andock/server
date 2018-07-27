@@ -5,7 +5,7 @@ andock server.
 * Install docksal
 * Update docksal
 * Configure docksal to listen on 0.0.0.0 
-* Add thin acs (andock server) 
+* Add thin andock server
   
 **The livecycle can be controlled with tags**
 * install
