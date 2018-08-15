@@ -45,14 +45,12 @@
       src: "templates/andock-server"
       dest: "/usr/local/bin/andock-server"
       owner: andock
-      mode: "u=rx"
+      mode: "u=rx,g=rx,o=rx"
     become: true
     tags: ['install', 'update']
 
   - name: Install docksal.
     shell: "andock-server install"
-    become_user: andock
-    become_method: su
     args:
       creates: "/usr/local/bin/fin"
     environment:
@@ -62,8 +60,6 @@
 
   - name: Update docksal.
     shell: "andock-server update"
-    become_user: andock
-    become_method: su
     environment:
       DOCKSAL_VHOST_PROXY_IP: "0.0.0.0"
       HOME: "{{ HOME }}"
