@@ -48,23 +48,7 @@
       mode: "u=rx,g=rx,o=rx"
     become: true
     tags: ['install', 'update']
-
-  - name: Install docksal.
-    shell: "andock-server install"
-    args:
-      creates: "/usr/local/bin/fin"
-    environment:
-      DOCKSAL_VHOST_PROXY_IP: "0.0.0.0"
-      HOME: "{{ HOME }}"
-    tags: ['install']
-
-  - name: Update docksal.
-    shell: "andock-server update"
-    environment:
-      DOCKSAL_VHOST_PROXY_IP: "0.0.0.0"
-      HOME: "{{ HOME }}"
-    tags: ['update']
-
+    become: true
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ HOME }}/.ssh/id_rsa.pub"

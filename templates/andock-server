@@ -138,18 +138,18 @@ version ()
 install_docksal ()
 {
     set -e
-    local andock_home=$(sudo -i -u andock echo \$HOME)
-    sudo -i -u andock mkdir -p ${andock_home}/.docksal
-	sudo -i -u andock touch ${andock_home}/.docksal/docksal.env
-	sudo -i -u andock echo 'CI=1' >> ${andock_home}/.docksal/docksal.env
-	sudo -i -u andock echo 'DOCKSAL_VHOST_PROXY_IP=0.0.0.0' >> ${andock_home}/.docksal/docksal.env
-    sudo -i -u andock curl -fsSL get.docksal.io | bash
+    local andock_home=$(echo \$HOME)
+    mkdir -p ${andock_home}/.docksal
+	touch ${andock_home}/.docksal/docksal.env
+	echo 'CI=1' >> ${andock_home}/.docksal/docksal.env
+	echo 'DOCKSAL_VHOST_PROXY_IP=0.0.0.0' >> ${andock_home}/.docksal/docksal.env
+    curl -fsSL get.docksal.io | bash
 }
 
 # Install docksal server
 update_docksal ()
 {
-    sudo -i -u andock fin update
+    fin update
 }
 
 _bridge ()
