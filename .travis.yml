@@ -19,8 +19,6 @@ script:
 
 
   # Run the role/playbook with ansible-playbook.
-  - pwd
-  - ls
   - ansible-playbook -i tests/inventory-localhost tests/test_instance.yml --tags install
   - ansible-playbook -i tests/inventory-localhost tests/test_instance.yml --tags update
   # Run the role/playbook again, checking to make sure it's idempotent.

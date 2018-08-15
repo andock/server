@@ -40,23 +40,17 @@
     become: true
     tags: ['install']
 
-  - name: Add DOCKSAL_VHOST_PROXY_IP export to /etc/profile.
-    lineinfile:
-      path: /etc/profile
-      regexp: '^export DOCKSAL_VHOST_PROXY_IP'
-      line: 'export DOCKSAL_VHOST_PROXY_IP=0.0.0.0'
+  - name: "Install andock server."
+    template:
+      src: "templates/andock-server"
+      dest: "/usr/local/bin/andock-server"
+      owner: andock
+      mode: "u=rx"
     become: true
-    tags: ['install']
-
-  - name: Add DOCKSAL_VHOST_PROXY_IP export to {{ HOME }}/.bashrc
-    lineinfile:
-      path: "{{ HOME }}/.bashrc"
-      regexp: '^export DOCKSAL_VHOST_PROXY_IP'
-      line: 'export DOCKSAL_VHOST_PROXY_IP=0.0.0.0'
-    become: true
+    tags: ['install', 'update']
 
   - name: Install docksal.
-    shell: "curl -fsSL get.docksal.io | sh"
+    shell: "andock-server install"
     become_user: andock
     become_method: su
     args:
@@ -67,7 +61,7 @@
     tags: ['install']
 
   - name: Update docksal.
-    shell: "fin update"
+    shell: "andock-server update"
     become_user: andock
     become_method: su
     environment:
@@ -75,22 +69,6 @@
       HOME: "{{ HOME }}"
     tags: ['update']
 
-  - name: "Install andock server."
-    template:
-      src: "templates/andock-server"
-      dest: "/usr/local/bin/andock-server"
-      owner: andock
-      mode: "u=rx"
-    become: true
-    tags: ['install', 'update']
-
-  - file:
-      path: "{{ HOME }}/.docksal"
-      owner: andock
-      group: docker
-      mode: "u=rwx,g=rwx,o=r"
-    become: true
-    tags: ['install', 'update']
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ HOME }}/.ssh/id_rsa.pub"
