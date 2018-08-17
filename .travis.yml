@@ -15,25 +15,14 @@ branches:
     - develop
 
 script:
-  # Check the role/playbook's syntax.
-
-
   # Run the role/playbook with ansible-playbook.
   - sudo pip install ansible==2.4.4
-  - sudo mkdir -p ~/.ssh/authorized_keys
   - sudo cp tests/authorized_keys ~/.ssh/authorized_keys
   - ansible-playbook -i tests/inventory-localhost tests/test_instance.yml --tags install
   # - ansible andock-fin-server -b -e "ansible_sudo_pass=andock" -e "ansible_ssh_user=andock" -i "tests/inventory-localhost" -m raw -a "andock-server install"
+
   # Check if authorized_key file exists.
   - sudo ls /home/andock/.ssh/authorized_keys
-  # Run the role/playbook again, checking to make sure it's idempotent.
-  # - >
-  #  ansible-playbook -i tests/inventory tests/test.yml --connection=local
-  #  | grep -q 'changed=0.*failed=0'
-  #  && (echo 'Idempotence test: pass' && exit 0)
-  #  || (echo 'Idempotence test: fail' && exit 1)
-
-  # - if [ "$ANSIBLE_VERSION" = "latest" ]; then ansible-lint tests/test.yml || true; fi
 
 cache:
   - pip
