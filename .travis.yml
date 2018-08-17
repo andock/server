@@ -23,7 +23,7 @@ script:
   - sudo mkdir -p ~/.ssh/authorized_keys
   - sudo cp tests/authorized_keys ~/.ssh/authorized_keys
   - ansible-playbook -i tests/inventory-localhost tests/test_instance.yml --tags install
-  - ansible andock-fin-server -b -e "ansible_sudo_pass=andock" -e "ansible_ssh_user=andock" -i "tests/inventory-localhost" -m raw -a "andock-server install"
+  # - ansible andock-fin-server -b -e "ansible_sudo_pass=andock" -e "ansible_ssh_user=andock" -i "tests/inventory-localhost" -m raw -a "andock-server install"
   # Check if authorized_key file exists.
   - sudo ls /home/andock/.ssh/authorized_keys
   # Run the role/playbook again, checking to make sure it's idempotent.
