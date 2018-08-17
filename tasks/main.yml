@@ -51,7 +51,7 @@
     become: true
 
   - name: Copy authorized key file to andock user.
-    shell: "cp ~/.ssh/authorized_keys {{a ndock_user_home }}/.ssh/authorized_keys"
+    shell: "cp ~/.ssh/authorized_keys {{ andock_user_home }}/.ssh/authorized_keys"
     register: ssh_key
     become: true
     tags: ['install']
