@@ -51,13 +51,13 @@
     become: true
 
   - name: Copy authorized key file to andock user.
-    shell: "cp ~/.ssh/authorized_keys ${HOME}/.ssh/authorized_keys"
+    shell: "cp ~/.ssh/authorized_keys ${andock_user_home}/.ssh/authorized_keys"
     register: ssh_key
     become: true
     tags: ['install']
 
   - file:
-      path: "{{ HOME }}/.ssh/authorized_keys"
+      path: "{{ andock_user_home }}/.ssh/authorized_keys"
       owner: andock
       group: docker
       mode: "600"
@@ -65,7 +65,7 @@
     tags: ['install']
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
-    shell: "cat {{ HOME }}/.ssh/id_rsa.pub"
+    shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
     register: ssh_key
     become: true
     become_user: andock

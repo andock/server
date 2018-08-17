@@ -6,4 +6,4 @@ pw: "andock"
 ssh_key: ""
 
 # default andock home folder.
-HOME: "/home/andock"
+andock_user_home: "/home/andock"
