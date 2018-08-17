@@ -54,7 +54,6 @@
     shell: "cp ~/.ssh/authorized_keys ${HOME}/.ssh/authorized_keys"
     register: ssh_key
     become: true
-    become_user: andock
     tags: ['install']
 
   - file:
