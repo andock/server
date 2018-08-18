@@ -25,7 +25,7 @@ script:
   - chmod 777 templates/andock-server
   - ./templates/andock-server install
   - ls ~/.docksal/docksal.env
-  - fin status
+  - fin version
 
 cache:
   - pip
