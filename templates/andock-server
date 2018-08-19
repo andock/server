@@ -137,11 +137,15 @@ version ()
 # Install docksal server
 install_docksal ()
 {
+    # Initial copy authorized key files from root user to andock user.
+    if [ -e ~/.ssh/authorized_keys ]; then
+        if [ ! -e /home/andock/.ssh/authorized_keys ]; then
+            cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys
+            # Add andock-server bridge for direct container connect.
+            sed -e 's/^/command="andock-server _bridge \$SSH_ORIGINAL_COMMAND" ' /home/andock/.ssh/authorized_keys
+        fi
+    fi
 
-    mkdir -p ~/.docksal
-	touch ~/.docksal/docksal.env
-	echo 'CI=1' >> ~/.docksal/docksal.env
-	echo 'DOCKSAL_VHOST_PROXY_IP=0.0.0.0' >> ~/.docksal/docksal.env
     curl -fsSL get.docksal.io | bash
 }
 

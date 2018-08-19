@@ -19,12 +19,9 @@ script:
   - sudo pip install ansible==2.4.4
   - sudo cp tests/authorized_keys ~/.ssh/authorized_keys
   - ansible-playbook -i tests/inventory-localhost tests/test_instance.yml --tags install
-  # - ansible andock-fin-server -b -e "ansible_sudo_pass=andock" -e "ansible_ssh_user=andock" -i "tests/inventory-localhost" -m raw -a "andock-server install"
-  # Check if authorized_key file exists.
   - sudo ls /home/andock/.ssh/authorized_keys
-  - chmod 777 templates/andock-server
-  - ./templates/andock-server install
   - ls ~/.docksal/docksal.env
+  - ls /home/andock/.docksal/docksal.env
   - fin version
 
 cache:

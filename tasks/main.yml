@@ -1,25 +1,25 @@
-  - name: Install sudo.
+  - name: Install sudo
     package:
       name: sudo
       state: latest
     become: true
     tags: ['install']
 
-  - name: Install git.
+  - name: Install git
     package:
       name: git
       state: latest
     become: true
     tags: ['install']
 
-  - name: Create docker group.
+  - name: Create docker group
     group:
       name: docker
       state: present
     become: true
     tags: ['install']
 
-  - name: Create andock user.
+  - name: Create andock user
     user:
       name: andock
       group: docker
@@ -31,7 +31,7 @@
     become: true
     tags: ['install']
 
-  - name: Allow 'sudo' group to user andock.
+  - name: Allow 'sudo' group to user andock
     lineinfile:
       dest: /etc/sudoers
       state: present
@@ -40,22 +40,67 @@
     become: true
     tags: ['install']
 
-  - name: "Install andock server."
+  - name: "Copy andock server"
     template:
       src: "templates/andock-server"
       dest: "/usr/local/bin/andock-server"
+      owner: root
+      mode: "u=rx,g=rx,o=rx"
+    become: true
+    tags: ['install', 'update']
+
+  - name: Ensures {{ andock_user_home }}/.docksal dir exists
+    file:
+      path: "{{ andock_user_home }}/.docksal"
+      state: directory
+      recurse: yes
+    tags: ['install']
+    become: true
+    become_user: andock
+
+  - name: Ensures /root/home/.docksal dir exists
+    file:
+      path: "/home/root/.docksal"
+      state: directory
+      recurse: yes
+    tags: ['install']
+    become: true
+
+  - name: "Generate root docksal.env"
+    template:
+      src: "{{ docksal_env_template_path }}"
+      dest: "/home/root/.docksal/docksal.env"
+      owner: root
+      mode: "u=rx,g=rx,o=rx"
+    become: true
+    tags: ['install', 'update']
+
+  - name: "Generate docksal.env"
+    template:
+      src: "{{ docksal_env_template_path }}"
+      dest: "{{ andock_user_home }}/.docksal/docksal.env"
       owner: andock
       mode: "u=rx,g=rx,o=rx"
     become: true
     tags: ['install', 'update']
+    become_user: andock
+
+  - name: "Install docksal"
+    shell: "andock-server install"
+    tags: ['install']
     become: true
 
-  - name: Copy authorized key file to andock user.
-    shell: "cp ~/.ssh/authorized_keys {{ andock_user_home }}/.ssh/authorized_keys"
-    register: ssh_key
+  - name: "Update stacks"
+    shell: "fin update --stacks"
+    tags: ['install', 'update']
+    become_user: andock
     become: true
-    tags: ['install']
-    ignore_errors: yes
+
+  - name: "Restart docksal as andock user"
+    shell: "fin system reset"
+    tags: ['install', 'update']
+    become_user: andock
+    become: true
 
   - file:
       path: "{{ andock_user_home }}/.ssh/authorized_keys"
