@@ -58,9 +58,9 @@
     become: true
     become_user: andock
 
-  - name: Ensures /root/home/.docksal dir exists
+  - name: Ensures ~/.docksal dir exists
     file:
-      path: "/home/root/.docksal"
+      path: "~/.docksal"
       state: directory
       recurse: yes
     tags: ['install']
@@ -69,7 +69,7 @@
   - name: "Generate root docksal.env"
     template:
       src: "{{ docksal_env_template_path }}"
-      dest: "/home/root/.docksal/docksal.env"
+      dest: "~/.docksal/docksal.env"
       owner: root
       mode: "u=rx,g=rx,o=rx"
     become: true
