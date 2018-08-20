@@ -49,31 +49,19 @@
     become: true
     tags: ['install', 'update']
 
+  - name: "Prepare authorized keys for andock user."
+    shell: "andock-server init_keys"
+    tags: ['install']
+    become: true
+
+
   - name: Ensures {{ andock_user_home }}/.docksal dir exists
     file:
       path: "{{ andock_user_home }}/.docksal"
       state: directory
       recurse: yes
-    tags: ['install']
+    tags: ['install_docksal']
     become: true
-    become_user: andock
-
-  - name: Ensures ~/.docksal dir exists
-    file:
-      path: "~/.docksal"
-      state: directory
-      recurse: yes
-    tags: ['install']
-    become: true
-
-  - name: "Generate root docksal.env"
-    template:
-      src: "{{ docksal_env_template_path }}"
-      dest: "~/.docksal/docksal.env"
-      owner: root
-      mode: "u=rx,g=rx,o=rx"
-    become: true
-    tags: ['install', 'update']
 
   - name: "Generate docksal.env"
     template:
@@ -81,25 +69,11 @@
       dest: "{{ andock_user_home }}/.docksal/docksal.env"
       owner: andock
       mode: "u=rx,g=rx,o=rx"
-    become: true
-    tags: ['install', 'update']
-    become_user: andock
+    tags: ['install_docksal', 'update_docksal']
 
   - name: "Install docksal"
-    shell: "andock-server install"
-    tags: ['install']
-    become: true
-
-  - name: "Update stacks"
-    shell: "fin update --stacks"
-    tags: ['install', 'update']
-    become_user: andock
-    become: true
-
-  - name: "Restart docksal as andock user"
-    shell: "fin system reset"
-    tags: ['install', 'update']
-    become_user: andock
+    raw: "andock-server install"
+    tags: ['install_andock']
     become: true
 
   - file:
@@ -108,14 +82,14 @@
       group: docker
       mode: "600"
     become: true
-    tags: ['install']
+    tags: ['install_andock']
     ignore_errors: yes
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
     register: ssh_key
     become: true
-    tags: ['install']
+    tags: ['install_andock']
 
   - debug: msg="{{ ssh_key.stdout_lines }}"
-    tags: ['install']
+    tags: ['install_andock']

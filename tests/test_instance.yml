@@ -1,6 +1,6 @@
 ---
 - name: Init andock instance
-  hosts: andock-fin-server
+  hosts: all
   gather_facts: true
   roles:
     - role: server

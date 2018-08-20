@@ -133,11 +133,9 @@ version ()
 	fi
 
 }
-
-# Install docksal server
-install_docksal ()
+copy_authorized_keys ()
 {
-    # Initial copy authorized key files from root user to andock user.
+# Initial copy authorized key files from root user to andock user.
     if [ -e ~/.ssh/authorized_keys ]; then
         if [ ! -e /home/andock/.ssh/authorized_keys ]; then
             cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys
@@ -145,6 +143,11 @@ install_docksal ()
             sed -e 's/^/command="andock-server _bridge \$SSH_ORIGINAL_COMMAND" ' /home/andock/.ssh/authorized_keys
         fi
     fi
+}
+# Install docksal server
+install_docksal ()
+{
+
 
     curl -fsSL get.docksal.io | bash
 }
@@ -185,7 +188,10 @@ case "$1" in
     shift
     update_docksal "$@"
   ;;
-
+  init_keys)
+    shift
+    copy_authorized_keys "$@"
+  ;;
   _bridge)
     shift
     _bridge "$@"
