@@ -18,8 +18,8 @@ script:
   # Run the role/playbook with ansible-playbook.
   - sudo pip install ansible==2.6.3
   - sudo cp tests/authorized_keys ~/.ssh/authorized_keys
-  - ansible-playbook -i local, tests/test_instance.yml --tags install
-  - ansible-playbook -u andock -i local, tests/test_instance.yml --tags install_docksal
+  - ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
+  - ansible-playbook --connection=local -u andock -i local, tests/test_instance.yml --tags install_docksal
   - sudo ls /home/andock/.ssh/authorized_keys
   - ls /home/andock/.docksal/docksal.env
   - fin version
