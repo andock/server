@@ -20,9 +20,8 @@ script:
   - sudo cp tests/authorized_keys ~/.ssh/authorized_keys
   - ansible-playbook -i local, tests/test_instance.yml --tags install
   - ansible-playbook -u andock -i local, tests/test_instance.yml --tags install_docksal
-  - sudo ls ~/.ssh/authorized_keys
-  - ls ~/.docksal/docksal.env
-  - ls ~/.docksal/docksal.env
+  - sudo ls /home/andock/.ssh/authorized_keys
+  - ls /home/andock/.docksal/docksal.env
   - fin version
 
 cache:

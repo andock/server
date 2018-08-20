@@ -140,7 +140,8 @@ copy_authorized_keys ()
         if [ ! -e /home/andock/.ssh/authorized_keys ]; then
             cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys
             # Add andock-server bridge for direct container connect.
-            sed -e 's/^/command="andock-server _bridge \$SSH_ORIGINAL_COMMAND" ' /home/andock/.ssh/authorized_keys
+            sed -e 's/^/command="andock-server _bridge \$SSH_ORIGINAL_COMMAND" /' ~/.ssh/authorized_keys > /home/andock/.ssh/authorized_keys
+            chown andock:docker /home/andock/.ssh/authorized_keys
         fi
     fi
 }
