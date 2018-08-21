@@ -19,9 +19,10 @@ script:
   - sudo pip install ansible==2.6.3
   - sudo cp tests/authorized_keys ~/.ssh/authorized_keys
   - ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
-  - su andock
+  - sudo su
+  - whoami
   - ansible-playbook --connection=local --become --extra-vars="ansible_sudo_pass=andock" -i local, tests/test_instance.yml --tags install_docksal
-  - sudo ls /home/andock/.ssh/authorized_keys
+  - ls /home/andock/.ssh/authorized_keys
   - ls /home/andock/.docksal/docksal.env
   - fin version
 
