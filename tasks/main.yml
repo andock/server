@@ -79,12 +79,10 @@
   - name: "Install docksal"
     raw: "andock-server install"
     tags: ['install_docksal']
-    become: true
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
     register: ssh_key
-    become: true
     tags: ['install_docksal']
 
   - debug: msg="{{ ssh_key.stdout_lines }}"
