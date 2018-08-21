@@ -19,6 +19,12 @@
     become: true
     tags: ['install']
 
+  - name: Ensure group "docker" exists
+    group:
+      name: docker
+      state: present
+    tags: ['install']
+
   - name: Create andock user
     user:
       name: andock
