@@ -74,7 +74,7 @@
       dest: "{{ andock_user_home }}/.docksal/docksal.env"
       owner: andock
       mode: "u=rx,g=rx,o=rx"
-    tags: ['install_docksal', 'update_docksal']
+    tags: ['install_docksal', 'update']
 
   - name: "Install docksal"
     raw: "andock-server install"
@@ -82,7 +82,7 @@
 
   - name: "Update docksal"
     raw: "andock-server update"
-    tags: ['update_docksal']
+    tags: ['update']
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"

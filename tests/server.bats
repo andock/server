@@ -16,11 +16,9 @@ setup() {
   sudo su andock -c 'fin version'
 }
 
-@test "update" {
-  ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
-}
 
-@test "update_docksal" {
-  sudo su andock -c 'ansible-playbook --connection=local -e "ansible_sudo_pass=andock" -i local, tests/test_instance.yml --tags update_docksal'
+@test "update" {
+  cd /home/andock/server
+  sudo su andock -c 'ansible-playbook --connection=local -e "ansible_sudo_pass=andock" -i local, tests/test_instance.yml --tags update'
   sudo su andock -c 'fin version'
 }
