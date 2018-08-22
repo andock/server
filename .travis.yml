@@ -8,8 +8,8 @@ branches:
 
 script:
   - sudo pip install ansible==2.6.3
-  - cd tests
-  - bats server.bats
+
+  - bats tests/server.bats
 
 cache:
   - pip
