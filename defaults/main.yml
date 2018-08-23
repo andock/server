@@ -10,3 +10,6 @@ andock_user_home: "{{ ansible_env.HOME }}"
 
 # Path to ansible template for docksal.env
 docksal_env_template_path: templates/docksal.env
+
+# Install docksal as root.
+use_become: true
