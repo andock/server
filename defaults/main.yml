@@ -6,7 +6,7 @@ pw: "andock"
 ssh_key: ""
 
 # default andock home folder.
-andock_user_home: "~"
+andock_user_home: "{{ ansible_env.HOME }}"
 
 # Path to ansible template for docksal.env
 docksal_env_template_path: templates/docksal.env

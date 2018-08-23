@@ -79,6 +79,7 @@
   - name: "Install docksal"
     raw: "andock-server install"
     tags: ['install_docksal']
+    become: true
 
   - name: "Update docksal"
     raw: "andock-server update"
