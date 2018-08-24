@@ -5,14 +5,16 @@ setup() {
 
 @test "install" {
   ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
-  sudo ls /home/andock/.docksal/docksal.env
-  sudo ls /home/andock/.ssh/authorized_keys
+  cd /home/andock
+  sudo ls .docksal/docksal.env
+  sudo ls .docksal/stacks
+  sudo ls .ssh/authorized_keys
   sudo su andock -c 'fin version'
 
 }
 
 @test "update" {
-  cd /home/andock/server
+  cd /home/andock
   ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
   sudo su andock -c 'fin version'
 }
