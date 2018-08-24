@@ -55,11 +55,6 @@
     become: true
     tags: ['install', 'update']
 
-  - name: "Prepare authorized keys for andock user."
-    shell: "andock-server init_keys"
-    tags: ['install']
-    become: true
-
   - name: Ensures {{ andock_user_home }}/.docksal dir exists
     file:
       path: "{{ andock_user_home }}/.docksal"
