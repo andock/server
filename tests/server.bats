@@ -5,8 +5,7 @@ setup() {
 }
 
 @test "install docksal" {
-  run ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
-  [ $status = 0 ]
+  ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
 }
 
 @test "Check docksal.env file " {
