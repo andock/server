@@ -13,6 +13,6 @@ setup() {
 
 @test "update" {
   cd /home/andock/server
-  sudo su andock -c 'ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update'
+  ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
   sudo su andock -c 'fin version'
 }
