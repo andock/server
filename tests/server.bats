@@ -22,7 +22,7 @@ setup() {
 
 @test "Check authorized_keys file" {
   cd /home/andock
-  run stat .ssh/authorized_keys
+  run sudo stat .ssh/authorized_keys
   [ $status = 0 ]
 }
 

@@ -10,6 +10,6 @@ script:
   - sudo pip install ansible==2.6.3
   - sudo apt-get install acl -y
   - bats tests/server.bats
-
+  - sudo cat /home/andock/.ssh/authorized_keys
 cache:
   - pip
