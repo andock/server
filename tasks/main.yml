@@ -65,7 +65,7 @@
       path: "{{ andock_user_home }}/.docksal"
       state: directory
       recurse: yes
-    tags: ['install_docksal']
+    tags: ['install']
     become: true
     become_user: andock
 
