@@ -1,8 +1,5 @@
 #!/usr/bin/env bats
 
-load 'libs/bats-support/load'
-load 'libs/bats-assert/load'
-
 setup() {
   sudo cp tests/authorized_keys ~/.ssh/authorized_keys
 }
