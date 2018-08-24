@@ -4,7 +4,7 @@ setup() {
   sudo cp tests/authorized_keys ~/.ssh/authorized_keys
 }
 
-@test "install" {
+@test "install docksal" {
   run ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
   [ $status = 0 ]
 }
@@ -34,7 +34,7 @@ setup() {
 }
 
 
-@test "update" {
+@test "update docksal" {
   ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
   cd /home/andock
   run sudo su andock -c 'fin version'

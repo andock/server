@@ -189,7 +189,7 @@ case "$1" in
     shift
     update_docksal "$@"
   ;;
-  init_keys)
+  generate-authorized-keys)
     shift
     copy_authorized_keys "$@"
   ;;

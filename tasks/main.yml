@@ -79,6 +79,11 @@
     become: true
     become_user: andock
 
+  - name: "Generate andock authorized_keys file"
+    shell: "andock-server generate-authorized-keys"
+    tags: ['install']
+    become: true
+
   - name: "Install docksal"
     shell: "andock-server install"
     tags: ['install']
