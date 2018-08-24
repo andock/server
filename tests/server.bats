@@ -14,7 +14,7 @@ setup() {
 }
 
 @test "update" {
-  cd /home/andock
   ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
+  cd /home/andock
   sudo su andock -c 'fin version'
 }

@@ -9,11 +9,6 @@ branches:
 script:
   - sudo pip install ansible==2.6.3
   - sudo apt-get install acl -y
-  - ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install -vvv
-  - sudo ls /home/andock/.docksal/docksal.env
-  - sudo ls /home/andock/.ssh/authorized_keys
-  - cd /home/andock
-  - sudo su andock -c 'fin version'
   - bats tests/server.bats
 
 cache:
