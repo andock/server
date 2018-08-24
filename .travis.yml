@@ -9,6 +9,7 @@ branches:
 script:
   - sudo pip install ansible==2.6.3
   - sudo apt-get install acl -y
+  - ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install -vvv
   - bats tests/server.bats
 
 cache:
