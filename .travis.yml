@@ -8,7 +8,7 @@ branches:
 
 script:
   - sudo pip install ansible==2.6.3
-  - sudo chmod 777 -R /var/tmp
+  - sudo apt-get install acl -y
   - bats tests/server.bats
 
 cache:
