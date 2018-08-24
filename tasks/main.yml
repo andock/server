@@ -66,6 +66,8 @@
       state: directory
       recurse: yes
     tags: ['install']
+    become: true
+    become_user: andock
 
   - name: "Generate docksal.env"
     template:
@@ -74,9 +76,11 @@
       owner: andock
       mode: "u=rw,g=rw,o=r"
     tags: ['install', 'update']
+    become: true
+    become_user: andock
 
   - name: "Install docksal"
-    shell: andock-server install
+    shell: "andock-server install"
     tags: ['install']
     become: true
     become_user: andock
@@ -100,6 +104,10 @@
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
     register: ssh_key
     tags: ['install']
+    become: true
+    become_user: andock
 
   - debug: msg="{{ ssh_key.stdout_lines }}"
     tags: ['install']
+    become: true
+    become_user: andock
