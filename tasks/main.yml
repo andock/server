@@ -37,12 +37,12 @@
     become: true
     tags: ['install']
 
-  - name: Enable sudo password
+  - name: Allow 'sudo' group to user andock (Disable password check)
     lineinfile:
       dest: /etc/sudoers
       state: present
       regexp: '^%sudo'
-      line: '%sudo   ALL=(ALL:ALL) ALL'
+      line: '%sudo   ALL=(ALL:ALL) NOPASSWD: ALL'
     become: true
     tags: ['install']
 
@@ -90,6 +90,15 @@
     tags: ['update']
     become: true
     become_user: andock
+
+  - name: Enable sudo password
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%sudo'
+      line: '%sudo   ALL=(ALL:ALL) ALL'
+    become: true
+    tags: ['install']
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"

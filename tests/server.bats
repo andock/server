@@ -1,11 +1,9 @@
 #!/usr/bin/env bats
 
-setup() {
-  sudo cp tests/authorized_keys ~/.ssh/authorized_keys
-  export ANSIBLE_SSH_PIPELINING=True
-}
 
 @test "install docksal" {
+  sudo cp tests/authorized_keys ~/.ssh/authorized_keys
+  export ANSIBLE_SSH_PIPELINING=True
   ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
 }
 
