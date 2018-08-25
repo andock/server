@@ -2,6 +2,7 @@
 
 setup() {
   sudo cp tests/authorized_keys ~/.ssh/authorized_keys
+  export ANSIBLE_SSH_PIPELINING=True
 }
 
 @test "install docksal" {
