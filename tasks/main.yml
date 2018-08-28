@@ -99,6 +99,8 @@
       line: '%sudo   ALL=(ALL:ALL) ALL'
     become: true
     tags: ['install']
+    when: sudo_nopasswd == false
+
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
