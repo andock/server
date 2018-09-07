@@ -12,3 +12,6 @@ script:
   - bats tests/server.bats
 cache:
   - pip
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
