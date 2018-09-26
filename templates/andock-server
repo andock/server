@@ -181,7 +181,7 @@ _bridge ()
     export $2;
   fi
   if [ "${LC_ANDOCK_ENV}" != "" ]; then
-    local service_name=$(fin @${LC_ANDOCK_ENV} ps | sed -n 's/\(.*\)_cli_1\(.*\)/\1/p')
+    local service_name=$(fin @${LC_ANDOCK_ENV} docker-compose ps | sed -n 's/\(.*\)_cli_1\(.*\)/\1/p')
     test -t 1 && USE_TTY="-t"
     docker exec  -i $USE_TTY "${service_name}_cli_1"  bash -c "$*"
   elif [ "$args" != "" ]; then
