@@ -84,6 +84,8 @@
     tags: ['install']
     become: true
     become_user: andock
+    environment:
+      DOCKSAL_VERSION: "{{ docksal_version }}"
 
   - name: "Update docksal"
     shell: "andock-server update"
@@ -96,11 +98,10 @@
       dest: /etc/sudoers
       state: present
       regexp: '^%sudo'
-      line: '%sudo   ALL=(ALL:ALL) ALL'
+      line: '%sudo   ALL=(ALL:ALL) NOPASSWD: /usr/sbin/adduser, /usr/sbin/userdel, /sbin/ip'
     become: true
     tags: ['install']
     when: sudo_nopasswd == false
-
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
     shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"

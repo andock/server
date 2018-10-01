@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ANDOCK_VERSION=0.1.0
+ANDOCK_VERSION=0.2.0
 
 # @author Leonid Makarov
 # Console colors

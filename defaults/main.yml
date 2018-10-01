@@ -14,3 +14,5 @@ docksal_env_template_path: templates/docksal.env
 # Install docksal as root. To install it via --local use use_become: false.
 sudo_nopasswd: false
 
+# docksal version.
+docksal_version: "v1.10.1"
