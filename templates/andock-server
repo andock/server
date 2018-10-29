@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ANDOCK_VERSION=0.2.0
+ANDOCK_VERSION=0.3.0
+ANDOCK_SSH2DOCKSAL=0.0.2
 
 # @author Leonid Makarov
 # Console colors
@@ -141,16 +142,7 @@ copy_authorized_keys ()
         if [ ! -e /home/andock/.ssh/authorized_keys ]; then
 
             # Copy authorized_keys from root
-            cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys.tmp
-
-            # Add own public key file to authorized_keys.
-            sudo cat /home/andock/.ssh/id_rsa.pub | sudo tee -a /home/andock/.ssh/authorized_keys.tmp >/dev/null
-
-            # Add andock-server bridge for direct container connect.
-            sed -e 's/^/command="andock-server _bridge \$SSH_ORIGINAL_COMMAND" /' /home/andock/.ssh/authorized_keys.tmp > /home/andock/.ssh/authorized_keys
-
-            # Remove temped key file
-            rm /home/andock/.ssh/authorized_keys.tmp
+            cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys
 
             # Set right permissions.
             chown andock:docker /home/andock/.ssh/authorized_keys
@@ -162,7 +154,18 @@ copy_authorized_keys ()
 # Install docksal server
 install_docksal ()
 {
+    # Install docksal.
     curl -fsSL get.docksal.io | bash
+
+    # Install docker.
+    docker run \
+    -d \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/bin/docker:/usr/bin/docker \
+    -v ${HOME}/.ssh/authorized_keys:/root/.ssh/authorized_keys \
+    --name ssh2docksal \
+    --restart always \
+    -p 0.0.0.0:2222:2222 andockio/ssh2docksal:${ANDOCK_SSH2DOCKSAL}
 }
 
 # Install docksal server
@@ -171,27 +174,6 @@ update_docksal ()
     fin update
 }
 
-# Main function. Function handles container connect.
-_bridge ()
-{
-
-  local args=$@
-
-  if [ "$1" = "env" ]; then
-    export $2;
-  fi
-  if [ "${LC_ANDOCK_ENV}" != "" ]; then
-    local service_name=$(fin @${LC_ANDOCK_ENV} docker-compose ps | sed -n 's/\(.*\)_cli_1\(.*\)/\1/p')
-    test -t 1 && USE_TTY="-t"
-    docker exec  -i $USE_TTY "${service_name}_cli_1"  bash -c "$*"
-  elif [ "$args" != "" ]; then
-    eval "$args"
-  else
-    /bin/bash
-  fi
-
-}
-#----------------------------------- MAIN -------------------------------------
 
 case "$1" in
   install)
@@ -205,10 +187,6 @@ case "$1" in
   generate-authorized-keys)
     shift
     copy_authorized_keys "$@"
-  ;;
-  _bridge)
-    shift
-    _bridge "$@"
   ;;
 
   -v | v)
