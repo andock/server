@@ -44,7 +44,7 @@
       regexp: '^%sudo'
       line: '%sudo   ALL=(ALL:ALL) NOPASSWD: ALL'
     become: true
-    tags: ['install']
+    tags: ['install', 'update']
 
   - name: "Copy andock server"
     template:
@@ -98,7 +98,7 @@
       regexp: '^%sudo'
       line: '%sudo   ALL=(ALL:ALL) NOPASSWD: /usr/sbin/adduser, /usr/sbin/userdel, /sbin/ip'
     become: true
-    tags: ['install']
+    tags: ['install', 'update']
     when: sudo_nopasswd == false
 
   - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
