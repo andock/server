@@ -34,10 +34,11 @@
 
 
 @test "update docksal" {
-  skip "Skip update for now ..."
+  #skip "Skip update for now ..."
   ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
-  cd /home/andock
-  run sudo su andock -c 'fin version'
+
+#  cd /home/andock
+#  run sudo su andock -c 'fin version'
   [ $status = 0 ]
 }
 
