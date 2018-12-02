@@ -33,7 +33,7 @@
 
 
 @test "update docksal" {
-  ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
+  ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
   cd /home/andock
   run sudo su andock -c 'fin version'
   [ $status = 0 ]
