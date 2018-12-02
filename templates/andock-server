@@ -175,7 +175,7 @@ install_docksal ()
 # Install docksal server
 update_docksal ()
 {
-    install_docksal "$@"
+  #  install_docksal "$@"
 }
 
 

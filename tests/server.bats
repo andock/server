@@ -38,3 +38,13 @@
   run sudo su andock -c 'fin version'
   [ $status = 0 ]
 }
+
+teardown() {
+    echo "Status: $status"
+    echo "Output:"
+    echo "================================================================"
+    for line in "${lines[@]}"; do
+        echo $line
+    done
+    echo "================================================================"
+}
