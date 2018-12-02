@@ -147,7 +147,7 @@ install_ssh2docksal ()
     -p 0.0.0.0:2222:2222 andockio/ssh2docksal:${ANDOCK_SSH2DOCKSAL_VERSION}
 
 }
-}
+
 # Install docksal server
 update_docksal ()
 {
