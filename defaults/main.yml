@@ -17,4 +17,4 @@ sudo_nopasswd: false
 # docksal version.
 docksal_version: "v1.10.1"
 
-ssh2docksal_version: "1.0-rc.2"
+ssh2docksal_version: "1.0-rc.1"
