@@ -84,8 +84,6 @@
     tags: ['install']
     become: true
     become_user: andock
-    environment:
-      DOCKSAL_VERSION: "{{ docksal_version }}"
 
   - name: "Update docksal"
     shell: "andock-server update"

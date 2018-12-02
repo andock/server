@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ANDOCK_VERSION=0.3.0
-ANDOCK_SSH2DOCKSAL={{ssh2docksal_version}}
+ANDOCK_SSH2DOCKSAL_VERSION={{ssh2docksal_version}}
+DOCKSAL_VERSION={{ docksal_version }}
 
 # @author Leonid Makarov
 # Console colors
@@ -155,9 +156,10 @@ copy_authorized_keys ()
 install_docksal ()
 {
     # Install docksal.
-    curl -fsSL get.docksal.io | bash
+    curl -fsSL get.docksal.io | DOCKSAL_VERSION=${DOCKSAL_VERSION} bash
 
-    # Install docker.
+    # Install ssh2docksal.
+    docker stop andock-ssh2docksal || true && docker rm andock-ssh2docksal || true
     docker run \
     -d \
     -e "HOST_UID=$(id -u)" \
@@ -167,13 +169,13 @@ install_docksal ()
     -v /usr/bin/docker:/usr/bin/docker \
     --name andock-ssh2docksal \
     -v ${HOME}/.ssh/authorized_keys:/home/docker/.ssh/authorized_keys \
-    -p 0.0.0.0:2222:2222 andockio/ssh2docksal:${ANDOCK_SSH2DOCKSAL}
+    -p 0.0.0.0:2222:2222 andockio/ssh2docksal:${ANDOCK_SSH2DOCKSAL_VERSION}
 }
 
 # Install docksal server
 update_docksal ()
 {
-    fin update
+    install_docksal "$@"
 }
 
 
