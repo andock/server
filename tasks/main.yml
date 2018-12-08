@@ -96,7 +96,7 @@
       dest: /etc/sudoers
       state: present
       regexp: '^%sudo'
-      line: '%sudo   ALL=(ALL:ALL) NOPASSWD: /usr/sbin/adduser, /usr/sbin/userdel, /sbin/ip'
+      line: '%sudo   ALL=(ALL:ALL) NOPASSWD: /usr/sbin/adduser, /usr/sbin/userdel, /sbin/ip, /sbin/ifconfig, /usr/bin/tee'
     become: true
     tags: ['install', 'update']
     when: sudo_nopasswd == false
