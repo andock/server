@@ -25,9 +25,9 @@
       state: present
     tags: ['install']
 
-  - name: Create andock user
+  - name: "Create andock ({{ andock_user }}) user"
     user:
-      name: andock
+      name: "{{ andock_user }}"
       group: docker
       shell: /bin/bash
       generate_ssh_key: yes
@@ -62,7 +62,7 @@
       recurse: yes
     tags: ['install']
     become: true
-    become_user: andock
+    become_user: "{{ andock_user }}"
 
   - name: "Generate docksal.env"
     template:
@@ -72,7 +72,7 @@
       mode: "u=rw,g=rw,o=r"
     tags: ['install', 'update']
     become: true
-    become_user: andock
+    become_user: "{{ andock_user }}"
 
   - name: "Generate andock authorized_keys file"
     shell: "andock-server generate-authorized-keys"
@@ -83,13 +83,13 @@
     shell: "andock-server install"
     tags: ['install']
     become: true
-    become_user: andock
+    become_user: "{{ andock_user }}"
 
   - name: "Update docksal"
     shell: "andock-server update"
     tags: ['update']
     become: true
-    become_user: andock
+    become_user: "{{ andock_user }}"
 
   - name: Enable sudo password
     lineinfile:
@@ -106,9 +106,9 @@
     register: ssh_key
     tags: ['install']
     become: true
-    become_user: andock
+    become_user: "{{ andock_user }}"
 
   - debug: msg="{{ ssh_key.stdout_lines }}"
     tags: ['install']
     become: true
-    become_user: andock
+    become_user: "{{ andock_user }}"

@@ -18,3 +18,6 @@ sudo_nopasswd: false
 docksal_version: "v1.11.1"
 
 ssh2docksal_version: "1.0-rc.1"
+
+# andock user name
+andock_user: "andock"
