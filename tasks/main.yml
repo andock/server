@@ -68,7 +68,7 @@
     template:
       src: "{{ docksal_env_template_path }}"
       dest: "{{ andock_user_home }}/.docksal/docksal.env"
-      owner: andock
+      owner: "{{ andock_user }}"
       mode: "u=rw,g=rw,o=r"
     tags: ['install', 'update']
     become: true
