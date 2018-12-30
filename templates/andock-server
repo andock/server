@@ -111,15 +111,17 @@ version ()
 copy_authorized_keys ()
 {
     if [ -e ~/.ssh/authorized_keys ]; then
-        if [ ! -e /home/andock/.ssh/authorized_keys ]; then
+        if [ -e /home/andock/.ssh ]; then
 
-            # Copy authorized_keys from root
-            cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys
-            # Copy andock id_rsa.pub to authorized_keys file.
-            cat /home/andock/.ssh/id_rsa.pub >> /home/andock/.ssh/authorized_keys
-            # Set right permissions.
-            chown andock:docker /home/andock/.ssh/authorized_keys
+            if [ ! -e /home/andock/.ssh/authorized_keys ]; then
 
+                # Copy authorized_keys from root
+                cp ~/.ssh/authorized_keys /home/andock/.ssh/authorized_keys
+                # Copy andock id_rsa.pub to authorized_keys file.
+                cat /home/andock/.ssh/id_rsa.pub >> /home/andock/.ssh/authorized_keys
+                # Set right permissions.
+                chown andock:docker /home/andock/.ssh/authorized_keys
+            fi
         fi
     fi
 }
