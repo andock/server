@@ -2,15 +2,12 @@ andock server.
 =========
 
 **andock.server** is a Ansible role which:
-* Install docksal
-* Update docksal
-* Configure docksal to listen on 0.0.0.0 
-* Add thin andock server
+* Create Andock user
+* Install Docksal
+* Update Docksal
+* Configure Docksal to listen on 0.0.0.0 
+* Add thin Andock server
   
-**The livecycle can be controlled with tags**
-* install
-* update
-
 
 Requirements
 ------------
@@ -44,7 +41,7 @@ $ ansible-galaxy install --force andock.fin
 License
 -------
 
-BSD
+GPL
 
 Author Information
 ------------------
