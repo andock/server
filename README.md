@@ -1,3 +1,5 @@
+[![Latest Release](https://img.shields.io/github/release/andock/server.svg?style=flat-square)](https://github.com/andock/andock/releases/latest) [![Build Status](https://img.shields.io/travis/andock/server.svg?style=flat-square)](https://travis-ci.org/andock/server)
+
 andock server.
 =========
 
