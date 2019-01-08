@@ -1,14 +1,14 @@
   - name: Install packages
     retries: 10
-    until: install_result|succeeded
+    register: install_result
+    until: install_result is succeeded
     package:
       name: "{{ item }}"
       state: present
     become: true
-    register: install_result
     loop:
-      - sudo
-      - git
+      - "sudo"
+      - "git"
     tags:
       - install
 
