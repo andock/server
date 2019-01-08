@@ -1,29 +1,37 @@
   - name: Install sudo
+    retries: 10
+    until: succeeded
     package:
       name: sudo
-      state: latest
+      state: present
     become: true
-    tags: ['install']
+    tags:
+      - install
 
   - name: Install git
     package:
       name: git
-      state: latest
+      state: present
     become: true
-    tags: ['install']
+    retries: 10
+    until: succeeded
+    tags:
+      - install
 
   - name: Create docker group
     group:
       name: docker
       state: present
     become: true
-    tags: ['install']
+    tags:
+      - install
 
   - name: Ensure group "docker" exists
     group:
       name: docker
       state: present
-    tags: ['install']
+    tags:
+      - install
 
   - name: "Create andock ({{ andock_user }}) user"
     user:
@@ -35,7 +43,8 @@
       ssh_key_bits: 4096
       password: "{{ pw }}"
     become: true
-    tags: ['install']
+    tags:
+      - install
 
   - name: Allow 'sudo' group to user andock (Disable password check)
     lineinfile:
@@ -44,7 +53,9 @@
       regexp: '^%sudo'
       line: '%sudo   ALL=(ALL:ALL) NOPASSWD: ALL'
     become: true
-    tags: ['install', 'update']
+    tags:
+      -install
+      -update
 
   - name: "Copy andock server"
     template:
@@ -70,24 +81,32 @@
       dest: "{{ andock_user_home }}/.docksal/docksal.env"
       owner: "{{ andock_user }}"
       mode: "u=rw,g=rw,o=r"
-    tags: ['install', 'update']
+    tags:
+      - install
+      - update
     become: true
     become_user: "{{ andock_user }}"
 
   - name: "Generate andock authorized_keys file"
-    shell: "andock-server generate-authorized-keys"
-    tags: ['install']
+    command: "andock-server generate-authorized-keys"
     become: true
+    tags:
+      - install
+      - skip_ansible_lint
 
   - name: "Install docksal"
-    shell: "andock-server install"
+    command: "andock-server install"
     tags: ['install']
     become: true
     become_user: "{{ andock_user }}"
+    args:
+      creates: "/usr/local/bin/fin"
 
-  - name: "Update docksal"
-    shell: "andock-server update"
-    tags: ['update']
+  - name: "Update Docksal"
+    command: "andock-server update"
+    tags:
+      - update
+      - skip_ansible_lint
     become: true
     become_user: "{{ andock_user }}"
 
@@ -96,19 +115,15 @@
       dest: /etc/sudoers
       state: present
       regexp: '^%sudo'
-      line: '%sudo   ALL=(ALL:ALL) NOPASSWD: /usr/sbin/adduser, /usr/sbin/userdel, /sbin/ip, /sbin/ifconfig, /usr/bin/tee'
+      line: "%sudo   ALL=(ALL:ALL) NOPASSWD: {{ no_passwd }}"
     become: true
-    tags: ['install', 'update']
-    when: sudo_nopasswd == false
+    tags:
+      - install
+      - update
+    when: not sudo_nopasswd
 
-  - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
-    shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
-    register: ssh_key
-    tags: ['install']
-    become: true
-    become_user: "{{ andock_user }}"
-
-  - debug: msg="{{ ssh_key.stdout_lines }}"
+  - name: "Please copy and paste the following SSH key to your git user"
+    debug: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
     tags: ['install']
     become: true
     become_user: "{{ andock_user }}"

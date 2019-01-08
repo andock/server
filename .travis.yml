@@ -1,11 +1,17 @@
 sudo: required
 dist: trusty
 
-script:
-  - sudo pip install ansible==2.6.3
+install:
+  # Install Ansible.
+  - sudo pip install ansible==2.4
+  - sudo pip install ansible-lint
   - sudo apt-get install acl -y
+
+script:
+  - ansible-lint .
   - bats tests/server.bats
   - DOCKSAL_VERSION=v1.11.1 fin update
+
 cache:
   - pip
 
