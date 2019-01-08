@@ -3,7 +3,7 @@ dist: trusty
 
 install:
   # Install Ansible.
-  - sudo pip install ansible==2.4
+  - sudo pip install ansible==2.6.2
   - sudo pip install ansible-lint
   - sudo apt-get install acl -y
 
