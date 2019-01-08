@@ -1,20 +1,14 @@
-  - name: Install sudo
+  - name: Install packages
     retries: 10
-    until: succeeded
+    until: install_result|succeeded
     package:
-      name: sudo
+      name: "{{ item }}"
       state: present
     become: true
-    tags:
-      - install
-
-  - name: Install git
-    package:
-      name: git
-      state: present
-    become: true
-    retries: 10
-    until: succeeded
+    register: install_result
+    loop:
+      - sudo
+      - git
     tags:
       - install
 
