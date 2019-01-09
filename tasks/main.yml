@@ -37,7 +37,8 @@
     ssh_key_bits: 4096
     password: "{{ pw }}"
   become: true
-  tags: ['install']
+  tags:
+    - install
 
 - name: Allow 'sudo' group to user andock (Disable password check)
   lineinfile:
@@ -55,14 +56,17 @@
     owner: root
     mode: "u=rx,g=rx,o=rx"
   become: true
-  tags: ['install', 'update']
+  tags:
+    - install
+    - update
 
 - name: Ensures {{ andock_user_home }}/.docksal dir exists
   file:
     path: "{{ andock_user_home }}/.docksal"
     state: directory
     recurse: yes
-  tags: ['install']
+  tags:
+    - install
   become: true
   become_user: "{{ andock_user }}"
 
@@ -72,7 +76,9 @@
     dest: "{{ andock_user_home }}/.docksal/docksal.env"
     owner: "{{ andock_user }}"
     mode: "u=rw,g=rw,o=r"
-  tags: ['install', 'update']
+  tags:
+    - install
+    - update
   become: true
   become_user: "{{ andock_user }}"
 
@@ -100,13 +106,16 @@
     regexp: '^%sudo'
     line: '%sudo   ALL=(ALL:ALL) NOPASSWD: /usr/sbin/adduser, /usr/sbin/userdel, /sbin/ip, /sbin/ifconfig, /usr/bin/tee'
   become: true
-  tags: ['install', 'update']
+  tags:
+    - install
+    - update
   when: not sudo_nopasswd
 
 - name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
   command: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
   register: ssh_key
-  tags: ['install']
+  tags:
+    - install
   become: true
   become_user: "{{ andock_user }}"
 
