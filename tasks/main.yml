@@ -81,14 +81,14 @@
     become: true
     become_user: "{{ andock_user }}"
 
-  - name: "Generate andock authorized_keys file"
+  - name: "Generate Andock authorized_keys file"
     command: "andock-server generate-authorized-keys"
     become: true
     tags:
       - install
       - skip_ansible_lint
 
-  - name: "Install docksal"
+  - name: "Install Docksal"
     command: "andock-server install"
     tags: ['install']
     become: true
@@ -117,7 +117,8 @@
     when: not sudo_nopasswd
 
   - name: "Please copy and paste the following SSH key to your git user"
-    debug: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
+    debug:
+      msg: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
     tags: ['install']
     become: true
     become_user: "{{ andock_user }}"
