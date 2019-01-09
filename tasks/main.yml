@@ -1,22 +1,14 @@
-- name: Install sudo
+- name: Install packages
   retries: 10
   register: install_result
   until: install_result is succeeded
   package:
-    name: sudo
+    name: "{{ item }}"
     state: present
   become: true
-  tags:
-    - install
-
-- name: Install git
-  retries: 10
-  register: install_result
-  until: install_result is succeeded
-  package:
-    name: git
-    state: present
-  become: true
+  loop:
+    - sudo
+    - git
   tags:
     - install
 
@@ -25,13 +17,15 @@
     name: docker
     state: present
   become: true
-  tags: ['install']
+  tags:
+   - install
 
 - name: Ensure group "docker" exists
   group:
     name: docker
     state: present
-  tags: ['install']
+  tags:
+    - install
 
 - name: "Create andock ({{ andock_user }}) user"
   user:
