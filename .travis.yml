@@ -8,7 +8,6 @@ install:
   - sudo apt-get install acl -y
 
 script:
-  - ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install -vvv
   - ansible-lint .
   - bats tests/server.bats
   - DOCKSAL_VERSION=v1.11.1 fin update
