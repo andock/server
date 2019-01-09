@@ -27,7 +27,7 @@
     tags:
       - install
 
-  - name: "Create andock ({{ andock_user }}) user"
+  - name: "Create Andock ({{ andock_user }}) user"
     user:
       name: "{{ andock_user }}"
       group: docker
@@ -40,7 +40,7 @@
     tags:
       - install
 
-  - name: Allow 'sudo' group to user andock (Disable password check)
+  - name: Allow 'sudo' group to user Andock (Disable password check)
     lineinfile:
       dest: /etc/sudoers
       state: present
