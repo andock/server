@@ -1,16 +1,24 @@
 - name: Install sudo
+  retries: 10
+  register: install_result
+  until: install_result is succeeded
   package:
     name: sudo
-    state: latest
+    state: present
   become: true
-  tags: ['install']
+  tags:
+    - install
 
 - name: Install git
+  retries: 10
+  register: install_result
+  until: install_result is succeeded
   package:
     name: git
-    state: latest
+    state: present
   become: true
-  tags: ['install']
+  tags:
+    - install
 
 - name: Create docker group
   group:
@@ -108,9 +116,16 @@
   become: true
   become_user: "{{ andock_user }}"
 
-- name: "Please copy and paste the following SSH key to your git user"
-  debug:
-    msg: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
+- name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
+  shell: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
+  register: ssh_key
+  tags:
+    - install
+  become: true
+  become_user: "{{ andock_user }}"
+
+- name: "Show key"
+  debug: msg="{{ ssh_key.stdout_lines }}"
   tags:
     - install
   become: true
