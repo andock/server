@@ -58,14 +58,17 @@
       owner: root
       mode: "u=rx,g=rx,o=rx"
     become: true
-    tags: ['install', 'update']
+    tags:
+      - install
+      - update
 
   - name: Ensures {{ andock_user_home }}/.docksal dir exists
     file:
       path: "{{ andock_user_home }}/.docksal"
       state: directory
       recurse: yes
-    tags: ['install']
+    tags:
+      - install
     become: true
     become_user: "{{ andock_user }}"
 
@@ -90,7 +93,8 @@
 
   - name: "Install Docksal"
     command: "andock-server install"
-    tags: ['install']
+    tags:
+      - install
     become: true
     become_user: "{{ andock_user }}"
     args:
@@ -119,6 +123,7 @@
   - name: "Please copy and paste the following SSH key to your git user"
     debug:
       msg: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
-    tags: ['install']
+    tags:
+      - install
     become: true
     become_user: "{{ andock_user }}"
