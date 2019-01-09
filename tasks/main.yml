@@ -95,10 +95,9 @@
     command: "andock-server install"
     tags:
       - install
+      - skip_ansible_lint
     become: true
     become_user: "{{ andock_user }}"
-    args:
-      creates: "/usr/local/bin/fin"
 
   - name: "Update Docksal"
     command: "andock-server update"
@@ -120,10 +119,10 @@
       - update
     when: not sudo_nopasswd
 
-#  - name: "Please copy and paste the following SSH key to your git user"
-#    debug:
-#      msg: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
- #   tags:
-  #    - install
-   # become: true
-    #become_user: "{{ andock_user }}"
+  - name: "Please copy and paste the following SSH key to your git user"
+    debug:
+      msg: "{{ lookup('file', andock_user_home + '/.ssh/id_rsa.pub') }}"
+    tags:
+      - install
+    become: true
+    become_user: "{{ andock_user }}"
