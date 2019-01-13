@@ -39,6 +39,7 @@
   become: true
   tags:
     - install
+    - print_action
 
 - name: Allow 'sudo' group to user andock (Disable password check)
   lineinfile:
@@ -47,7 +48,9 @@
     regexp: '^%sudo'
     line: '%sudo   ALL=(ALL:ALL) NOPASSWD: ALL'
   become: true
-  tags: ['install', 'update']
+  tags:
+    - install
+    - update
 
 - name: "Copy andock server"
   template:
@@ -84,18 +87,23 @@
 
 - name: "Generate andock authorized_keys file"
   command: "andock-server generate-authorized-keys"
-  tags: ['install']
+  tags:
+    - install
   become: true
 
 - name: "Install docksal"
   command: "andock-server install"
-  tags: ['install']
+  tags:
+    - install
+    - print_action
   become: true
   become_user: "{{ andock_user }}"
 
 - name: "Update docksal"
   command: "andock-server update"
-  tags: ['update']
+  tags:
+    - update
+    - print_action
   become: true
   become_user: "{{ andock_user }}"
 
@@ -111,7 +119,7 @@
     - update
   when: not sudo_nopasswd
 
-- name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
+- name: "Cat key"
   command: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
   register: ssh_key
   tags:
@@ -119,17 +127,10 @@
   become: true
   become_user: "{{ andock_user }}"
 
-- name: Please copy and paste the following SSH key to your git user. andock will use it to checkout your target git repository.
-  command: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
-  register: ssh_key
-  tags:
-    - install
-  become: true
-  become_user: "{{ andock_user }}"
-
-- name: "Show key"
+- name: "Please copy and paste the following SSH key to your git user. Andock will use it to checkout your target git repository."
   debug: msg="{{ ssh_key.stdout_lines }}"
   tags:
     - install
+    - print_action
   become: true
   become_user: "{{ andock_user }}"
