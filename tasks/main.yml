@@ -124,6 +124,7 @@
   register: ssh_key
   tags:
     - install
+    - show_key
   become: true
   become_user: "{{ andock_user }}"
 
@@ -132,5 +133,6 @@
   tags:
     - install
     - print_action
+    - show_key
   become: true
   become_user: "{{ andock_user }}"
