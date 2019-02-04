@@ -27,6 +27,13 @@
   tags:
     - install
 
+- name: Ensure group "sudo" exists
+  group:
+    name: sudo
+    state: present
+  tags:
+    - install
+
 - name: "Create andock ({{ andock_user }}) user"
   user:
     name: "{{ andock_user }}"
@@ -92,7 +99,7 @@
   become: true
 
 - name: "Install docksal"
-  command: "andock-server install"
+  command: "/usr/local/bin/andock-server install"
   tags:
     - install
     - print_action
