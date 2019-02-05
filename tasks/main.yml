@@ -9,6 +9,7 @@
   loop:
     - sudo
     - git
+    - curl
   tags:
     - install
 
@@ -34,7 +35,7 @@
   tags:
     - install
 
-- name: "Create andock ({{ andock_user }}) user"
+- name: "Create Andock ({{ andock_user }}) user"
   user:
     name: "{{ andock_user }}"
     group: docker
@@ -59,7 +60,18 @@
     - install
     - update
 
-- name: "Copy andock server"
+- name: Add /usr/local/bin to secure_path
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin'
+    line: 'Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin'
+  become: true
+  tags:
+    - install
+    - update
+
+- name: "Copy Andock server"
   template:
     src: "templates/andock-server"
     dest: "/usr/local/bin/andock-server"
@@ -98,8 +110,8 @@
     - install
   become: true
 
-- name: "Install docksal"
-  command: "/usr/local/bin/andock-server install"
+- name: "Install Docksal"
+  command: "andock-server install"
   tags:
     - install
     - print_action
