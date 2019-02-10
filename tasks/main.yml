@@ -121,7 +121,6 @@
   command: "touch ~/.ssh/authorized_keys"
   tags:
     - install
-    - print_action
   become: true
   args:
     creates: "~/.ssh/authorized_keys"
@@ -135,7 +134,6 @@
     - "mv {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys.tmp {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys"
   tags:
     - install
-    - print_action
   become: true
   args:
     creates: "{{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys"
