@@ -4,11 +4,9 @@ andock server.
 =========
 
 **andock.server** is a Ansible role which:
-* Create Andock user
-* Install Docksal
-* Update Docksal
-* Configure Docksal to listen on 0.0.0.0 
-* Add thin Andock server
+* Create Andock user and setup user permissions
+* Install and updates Docksal in sandbox mode 
+* Install andockio/ssh2docksal
   
 
 Requirements
@@ -17,9 +15,6 @@ Requirements
 In order to build your apps with Andock CI, you will need:
 
 * Ansible in your deploy machine
-* Docksal
-
-
 
 Installation
 ------------

@@ -1,5 +1,5 @@
 - name: Install packages
-  retries: 10
+  retries: 3
   register: install_result
   until: install_result is succeeded
   package:
@@ -10,8 +10,10 @@
     - sudo
     - git
     - curl
+    - python-pip
   tags:
     - install
+    - update
 
 - name: Create docker group
   group:
@@ -35,7 +37,7 @@
   tags:
     - install
 
-- name: "Create Andock ({{ andock_user }}) user"
+- name: "Create Andock user"
   user:
     name: "{{ andock_user }}"
     group: docker
@@ -48,6 +50,29 @@
   tags:
     - install
     - print_action
+
+- name: "Register ANDOCK_HOME"
+  command: "pwd"
+  register: ANDOCK_HOME
+  tags:
+    - install
+    - update
+  become: true
+  become_user: "{{ andock_user }}"
+  args:
+    chdir: "{{ andock_user_home }}"
+
+- name: Install docker-py
+  pip:
+    name: docker-py
+  become: true
+  become_user: "{{ andock_user }}"
+  tags:
+    - install
+    - update
+  retries: 3
+  register: py_install_result
+  until: py_install_result is succeeded
 
 - name: Allow 'sudo' group to user andock (Disable password check)
   lineinfile:
@@ -66,17 +91,6 @@
     state: present
     regexp: '^Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin'
     line: 'Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin'
-  become: true
-  tags:
-    - install
-    - update
-
-- name: "Copy Andock server"
-  template:
-    src: "templates/andock-server"
-    dest: "/usr/local/bin/andock-server"
-    owner: root
-    mode: "u=rx,g=rx,o=rx"
   become: true
   tags:
     - install
@@ -104,24 +118,85 @@
   become: true
   become_user: "{{ andock_user }}"
 
-- name: "Generate andock authorized_keys file"
-  command: "andock-server generate-authorized-keys"
+- name: "Ensure authorized_keys file exists"
+  command: "touch ~/.ssh/authorized_keys"
   tags:
     - install
   become: true
+  args:
+    creates: "~/.ssh/authorized_keys"
+
+- name: "Copy authorized_keys file"
+  command: "bash -c '{{ item }}'"
+  with_items:
+    - "cp ~/.ssh/authorized_keys {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys.tmp"
+    - "cat {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/id_rsa.pub >> {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys.tmp"
+    - "chown andock:docker {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys.tmp"
+    - "mv {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys.tmp {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys"
+  tags:
+    - install
+  become: true
+  args:
+    creates: "{{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys"
 
 - name: "Install Docksal"
-  command: "andock-server install"
+  command: "bash -c 'curl -fsSL get.docksal.io | DOCKSAL_VERSION={{ docksal_version }} bash'"
   tags:
     - install
     - print_action
   become: true
   become_user: "{{ andock_user }}"
+  args:
+    creates: "/usr/local/bin/fin"
 
 - name: "Update docksal"
-  command: "andock-server update"
+  command: "fin update"
   tags:
     - update
+    - print_action
+  become: true
+  become_user: "{{ andock_user }}"
+  environment:
+    - DOCKSAL_VERSION: "{{ docksal_version }}"
+
+- name: "Register HOST_UID"
+  command: "id -u"
+  register: HOST_UID
+  tags:
+    - install
+    - update
+  become: true
+  become_user: "{{ andock_user }}"
+
+- name: "Register HOST_GID"
+  command: "bash -c 'cut -d: -f3 < <(getent group docker)'"
+  register: HOST_GID
+  tags:
+    - install
+    - update
+  become: true
+  become_user: "{{ andock_user }}"
+
+- name: "Install andockio/ssh2docksal"
+  docker_container:
+    image: "andockio/ssh2docksal:{{ ssh2docksal_version }}"
+    state: started
+    restart_policy: always
+    name: "andock-ssh2docksal"
+    detach: yes
+    command: "{{ ssh2docksal_command }}"
+    ports:
+      - 0.0.0.0:2222:2222
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - "{{ ansible_env.HOME }}/.ssh/authorized_keys:/home/docker/.ssh/authorized_keys:rw"
+    env:
+      HOST_UID: "{{ HOST_UID.stdout_lines | join('\n') }}"
+      HOST_GID: "{{ HOST_GID.stdout_lines | join('\n') }}"
+  tags:
+    - update
+    - install
     - print_action
   become: true
   become_user: "{{ andock_user }}"
@@ -147,8 +222,8 @@
   become: true
   become_user: "{{ andock_user }}"
 
-- name: "Please copy and paste the following SSH key to your git user. Andock will use it to checkout your target git repository."
-  debug: msg="{{ ssh_key.stdout_lines }}"
+- name: "Please copy and paste the following SSH key to your git user if you can't use a deploy token."
+  debug: msg="{{ ssh_key.stdout_lines | join('\n') }}"
   tags:
     - install
     - print_action
