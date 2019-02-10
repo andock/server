@@ -121,6 +121,7 @@
   command: "touch ~/.ssh/authorized_keys"
   tags:
     - install
+    - print_action
   become: true
   args:
     creates: "~/.ssh/authorized_keys"
@@ -134,6 +135,7 @@
     - "mv {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys.tmp {{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys"
   tags:
     - install
+    - print_action
   become: true
   args:
     creates: "{{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys"
@@ -189,7 +191,7 @@
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
-      - "{{ ansible_env.HOME }}/.ssh/authorized_keys:/home/docker/.ssh/authorized_keys:rw"
+      - "{{ ANDOCK_HOME.stdout_lines | join('\n') }}/.ssh/authorized_keys:/home/docker/.ssh/authorized_keys:rw"
     env:
       HOST_UID: "{{ HOST_UID.stdout_lines | join('\n') }}"
       HOST_GID: "{{ HOST_GID.stdout_lines | join('\n') }}"
