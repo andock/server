@@ -1,12 +1,3 @@
-- name: Add repository
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-  tags:
-    - install
-    - update
-
 - name: Install packages
   retries: 3
   register: install_result
@@ -19,10 +10,16 @@
     - sudo
     - git
     - curl
-    - python-pip
   tags:
     - install
     - update
+
+- easy_install:
+    name: pip
+  tags:
+    - install
+    - update
+  become: true
 
 - name: Create docker group
   group:
