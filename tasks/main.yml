@@ -230,7 +230,7 @@
   template:
     src: "templates/version"
     dest: "{{ andock_user_home }}/.andock/version"
-    owner: "{{andock_user}}"
+    owner: "{{ andock_user }}"
     mode: "u=rw,g=rw,o=rw"
   become: true
   become_user: "{{ andock_user }}"
