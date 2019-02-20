@@ -217,6 +217,25 @@
     - update
   when: not sudo_nopasswd
 
+- name: "Create Andock conf folder"
+  file:
+    state: directory
+    path: "{{ andock_user_home }}/.andock"
+  tags:
+    - install
+  become: true
+  become_user: "{{ andock_user }}"
+
+- name: "Copy version.env"
+  template:
+    src: "templates/version.env"
+    dest: "{{ andock_user_home }}/.andock/version.env"
+    owner: "{{andock_user}}"
+    mode: "u=rw,g=rw,o=rw"
+  become: true
+  become_user: "{{ andock_user }}"
+  tags: ['install', 'update']
+
 - name: "Cat key"
   command: "cat {{ andock_user_home }}/.ssh/id_rsa.pub"
   register: ssh_key
