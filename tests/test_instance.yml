@@ -7,3 +7,4 @@
       pw: $6$wZNLr.ic$/.EkftUMG3CZ70J6bhIO1ARKZnEyCUsvJHec1ENXWgYSQugN4LX1ycOWA4j61MIczYvXyCKewo.3HDnuNRbTg1
       andock_user_home: "/home/andock"
       sudo_nopasswd: true
+      enable_swap_limit: false
