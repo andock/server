@@ -20,6 +20,54 @@
     - install
   become: true
 
+- name: Enable cgroup_enable and swapaccount
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX=="
+    line: 'GRUB_CMDLINE_LINUX=="cgroup_enable=memory swapaccount=1"'
+  become: true
+  register: grubfile
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags:
+    - install
+    - update
+
+- name: Enable cgroup_enable and swapaccount - update grub
+  command: update-grub
+  become: true
+  when:
+    - grubfile is changed
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags:
+    - install
+    - update
+
+- name: Reboot... grubfile has changed.
+  shell: "sleep 5 && reboot"
+  async: 1
+  poll: 0
+  when:
+    - grubfile is changed
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags:
+    - install
+    - update
+    - print_action
+
+- name: Wait for the reboot to complete.
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 300
+  when:
+    - grubfile is changed
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags:
+    - install
+    - update
+    - print_action
+
 - name: Create docker group
   group:
     name: docker
