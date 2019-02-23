@@ -27,7 +27,9 @@
     line: 'GRUB_CMDLINE_LINUX=="cgroup_enable=memory swapaccount=1"'
   become: true
   register: grubfile
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - enable_swap_limit
   tags:
     - install
     - update
@@ -38,6 +40,7 @@
   when:
     - grubfile is changed
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - enable_swap_limit
   tags:
     - install
     - update
@@ -49,6 +52,7 @@
   when:
     - grubfile is changed
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - enable_swap_limit
   tags:
     - install
     - update
@@ -63,6 +67,7 @@
   when:
     - grubfile is changed
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - enable_swap_limit
   tags:
     - install
     - update

@@ -8,6 +8,9 @@ ssh_key: ""
 # default andock home folder.
 andock_user_home: "~"
 
+# Set GRUB_CMDLINE_LINUX=="cgroup_enable=memory swapaccount=1" in grub"
+enable_swap_limit: true
+
 # Path to ansible template for docksal.env
 docksal_env_template_path: templates/docksal.env
 
