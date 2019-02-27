@@ -276,6 +276,7 @@
     path: "{{ andock_user_home }}/.andock"
   tags:
     - install
+    - update
   become: true
   become_user: "{{ andock_user }}"
 
