@@ -4,7 +4,7 @@
 @test "install docksal" {
   sudo cp tests/authorized_keys ~/.ssh/authorized_keys
   export ANSIBLE_SSH_PIPELINING=True
-  run ansible-playbook --connection=local -i local, tests/test_instance.yml --tags install
+  run ansible-playbook --connection=local -i local, tests/test_instance.yml
   [ $status = 0 ]
 }
 
@@ -36,7 +36,7 @@
 
 @test "update docksal" {
   #skip "Skip update for now ..."
-  run ansible-playbook --connection=local -i local, tests/test_instance.yml --tags update
+  run ansible-playbook --connection=local -i local, tests/test_instance.yml
   [ $status = 0 ]
 
 #  cd /home/andock
