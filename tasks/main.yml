@@ -83,7 +83,7 @@
     name: sudo
     state: present
 
-- name: "Create Andock user"
+- name: "Create / update Andock user"
   user:
     name: "{{ andock_user }}"
     group: docker
@@ -92,6 +92,7 @@
     groups: "sudo"
     ssh_key_bits: 4096
     password: "{{ pw }}"
+    update_password: on_create
   become: true
   tags:
     - print_action
@@ -178,7 +179,6 @@
   when:
     - fin_stat_result.stat.exists
 
-
 - name: "Install Docksal"
   command: "bash -c 'curl -fsSL get.docksal.io | DOCKSAL_VERSION={{ docksal_version }} bash'"
   tags:
@@ -187,6 +187,8 @@
   become_user: "{{ andock_user }}"
   args:
     creates: "/usr/local/bin/fin"
+  when:
+    - not fin_stat_result.stat.exists
 
 - name: "Register HOST_UID"
   command: "id -u"
