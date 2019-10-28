@@ -13,7 +13,7 @@ DOCUMENTATION = '''
     description:
         - Ansible output that can be quite a bit easier to read than the
           default JSON formatting.
-    extends_documentation_fragment:	
+    extends_documentation_fragment:
       - default_callback
     requirements:
       - set as stdout in configuration
@@ -90,7 +90,6 @@ class CallbackModule(Default):
 
     def v2_runner_on_ok(self, result):
         if 'print_action' in result._task.tags or self._display.verbosity > 1:
-            self.display()
             super(CallbackModule, self).v2_runner_on_ok(result)
         self.outlines = []
 
@@ -113,7 +112,6 @@ class CallbackModule(Default):
 
     def v2_runner_item_on_ok(self, result):
         if 'print_action' in result._task.tags or self._display.verbosity > 1:
-            self.display()
             super(CallbackModule, self).v2_runner_item_on_ok(result)
 
         self.outlines = []
@@ -132,7 +130,6 @@ class CallbackModule(Default):
             del res['deprecations']
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
-        self.display()
         super(CallbackModule, self).v2_runner_on_failed(result, ignore_errors)
 
     def v2_runner_on_skipped(self, result):
