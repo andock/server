@@ -136,6 +136,11 @@
   become: true
   become_user: "{{ andock_user }}"
 
+- name: Check that docksal.env exists
+  stat:
+    path: "{{ andock_user_home }}/.docksal/docksal.env"
+  register: docksal_env_stat_result
+
 - name: "Generate docksal.env"
   template:
     src: "{{ docksal_env_template_path }}"
@@ -144,6 +149,8 @@
     mode: "u=rw,g=rw,o=r"
   become: true
   become_user: "{{ andock_user }}"
+  when:
+    - docksal_env_stat_result.stat.exists
 
 - name: "Ensure authorized_keys file exists"
   command: "touch ~/.ssh/authorized_keys"
@@ -166,6 +173,15 @@
   stat:
     path: /usr/local/bin/fin
   register: fin_stat_result
+
+- name: Unlock docksal updates
+  command: fin config set DOCKSAL_LOCK_UPDATES=0 --global
+  tags:
+    - print_action
+  become: true
+  become_user: "{{ andock_user }}"
+  when:
+    - fin_stat_result.stat.exists
 
 - name: "Update Docksal"
   command: "fin update"
