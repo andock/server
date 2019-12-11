@@ -10,6 +10,7 @@
     - sudo
     - git
     - curl
+    - python3
 
 - name: Install pip
   command: "bash -c 'curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py;python get-pip.py; rm get-pip.py'"
